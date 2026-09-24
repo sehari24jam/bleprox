@@ -4,6 +4,9 @@
 
 `bleprox` monitors the RSSI (Received Signal Strength Indicator) of any nearby BLE device (smartwatch, fitness tracker, phone, or BLE beacon) and triggers `loginctl lock-session` / `loginctl unlock-session` as you step away from or return to your computer.
 
+> [!NOTE]
+> Currently work in my setup with Huawei Band 9 as BLE beacon.
+
 ---
 
 ## Features
