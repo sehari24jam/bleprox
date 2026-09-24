@@ -1,0 +1,9 @@
+# Binaries
+bleprox
+*.exe
+*.test
+
+# Environment / IDE
+.vscode/
+.idea/
+*.swp
