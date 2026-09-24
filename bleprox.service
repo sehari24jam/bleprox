@@ -1,0 +1,16 @@
+[Unit]
+Description=BLE Proximity Lock/Unlock Daemon
+Documentation=https://github.com/sehari24jam/bleprox
+After=bluetooth.target
+Wants=bluetooth.target
+
+[Service]
+Type=simple
+# Update the target -mac address and RSSI thresholds as needed
+# Adjust executable path if installed elsewhere (e.g. %h/go/bin/bleprox or /usr/local/bin/bleprox)
+ExecStart=%h/gofiles/src/github.com/sehari24jam/bleprox/bleprox -mac AA:BB:CC:DD:EE:FF -quiet
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=default.target
