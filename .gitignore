@@ -7,3 +7,5 @@ bleprox
 .vscode/
 .idea/
 *.swp
+
+.env

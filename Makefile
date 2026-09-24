@@ -4,6 +4,7 @@ GO?=go
 PREFIX?=/usr/local
 VERSION?=$(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
+-include .env
 
 .PHONY: all build clean install run monitor test help
 
@@ -62,12 +63,18 @@ install: build strip
 install-service: build
 	@echo "Installing systemd user service..."
 	mkdir -p $(HOME)/.config/systemd/user
-	@if [ -n "$(MAC)" ]; then \
-		sed "s/AA:BB:CC:DD:EE:FF/$(MAC)/g" bleprox.service > $(HOME)/.config/systemd/user/bleprox.service; \
+	@BIN_PATH="$(PWD)/$(BINARY_NAME)"; \
+	if [ -f "$(DESTDIR)$(PREFIX)/bin/$(BINARY_NAME)" ]; then \
+		BIN_PATH="$(DESTDIR)$(PREFIX)/bin/$(BINARY_NAME)"; \
+	elif [ -f "$(DESTDIR)$(PREFIX)/$(BINARY_NAME)" ]; then \
+		BIN_PATH="$(DESTDIR)$(PREFIX)/$(BINARY_NAME)"; \
+	fi; \
+	echo "Using binary path: $$BIN_PATH"; \
+	if [ -n "$(MAC)" ]; then \
+		sed -e "s|^ExecStart=[^ ]*|ExecStart=$$BIN_PATH|" -e "s/AA:BB:CC:DD:EE:FF/$(MAC)/g" bleprox.service > $(HOME)/.config/systemd/user/bleprox.service; \
 	else \
-		cp bleprox.service $(HOME)/.config/systemd/user/bleprox.service; \
+		sed -e "s|^ExecStart=[^ ]*|ExecStart=$$BIN_PATH|" bleprox.service > $(HOME)/.config/systemd/user/bleprox.service; \
 	fi
 	systemctl --user daemon-reload
 	@echo "Service installed to  ~/.config/systemd/user/bleprox.service"
 	@echo "To enable and start: systemctl --user enable --now bleprox"
-
