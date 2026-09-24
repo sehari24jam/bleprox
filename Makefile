@@ -52,11 +52,11 @@ strip:
 	@echo "Stripping..."
 	strip $(BINARY_NAME)
 
-## install ~ Install binary to PREFIX/bin (default /usr/local/bin)
+## install ~ Install binary (using sudo) to PREFIX/bin (default /usr/local/bin)
 install: build strip
 	@echo "Installing $(BINARY_NAME) to $(PREFIX)/bin..."
-	install -d $(DESTDIR)$(PREFIX)/bin
-	install -m 755 $(BINARY_NAME) $(DESTDIR)$(PREFIX)/bin/
+	sudo install -d $(DESTDIR)$(PREFIX)/bin
+	sudo install -m 755 $(BINARY_NAME) $(DESTDIR)$(PREFIX)/bin/
 
 ## install-service ~ Install systemd user service file (e.g. make install-service MAC=AA:BB:CC:DD:EE:FF)
 install-service: build
